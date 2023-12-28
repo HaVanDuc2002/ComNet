@@ -7,6 +7,7 @@
 
 
 #define MAX_LENGHT      1024
+#define PORT		5000
 char msg[MAX_LENGHT];
 pthread_mutex_t mutex;
 
@@ -32,7 +33,7 @@ int main(){
     struct sockaddr_in ServerIp;
     char client_name[100];
     sock = socket( AF_INET, SOCK_STREAM,0);
-    ServerIp.sin_port = htons(1234);
+    ServerIp.sin_port = htons(PORT);
     ServerIp.sin_family= AF_INET;
     ServerIp.sin_addr.s_addr = inet_addr("127.0.0.1");
     if( (connect( sock ,(struct sockaddr *)&ServerIp,sizeof(ServerIp))) == -1 )
@@ -40,9 +41,9 @@ int main(){
 	
 	recv(sock, send_msg, MAX_LENGHT, 0);
 	printf("Server:  %s", send_msg);
-       memset(send_msg, '\0', MAX_LENGHT);
-       fgets(send_msg,MAX_LENGHT,stdin);
-       send(sock,send_msg,strlen(send_msg), 0);
+       	memset(send_msg, 0, MAX_LENGHT);
+       	fgets(send_msg,MAX_LENGHT,stdin);
+       	send(sock,send_msg,strlen(send_msg), 0);
 	recv(sock, send_msg, MAX_LENGHT, 0);
 	printf("%s", send_msg);
     //creating a client thread which is always waiting for a message
@@ -57,7 +58,6 @@ int main(){
         pthread_mutex_lock(&mutex);
         printf("You: %s", send_msg);
         pthread_mutex_unlock(&mutex);
-      // len = write(sock,send_msg,strlen(send_msg));
         len = send(sock,send_msg,strlen(send_msg), 0);
         memset(send_msg, '\0', MAX_LENGHT);
         if(len < 0) 

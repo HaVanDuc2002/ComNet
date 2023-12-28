@@ -1,19 +1,17 @@
 #include "common.h"
 
-extern server_db *head, *head1;
+extern server_db *head;
 
 int insert_at_last(server_db **head, const char *msg, const char *pass, int sock)
 {
 	//Create node
-	server_db *new = malloc(sizeof(server_db));
+	server_db *new = (server_db*)malloc(sizeof(server_db));
 
 	//Validation
 	if (new == NULL)
 	{
 		return FAILURE;
 	}
-	//	new->data = data;
-	//	new->link = NULL;
 
 	//Search for username only if we are registering user
 
@@ -32,10 +30,7 @@ int insert_at_last(server_db **head, const char *msg, const char *pass, int sock
 	}
 
 
-	//Take a temporary pointer
 	server_db *temp = *head;
-	//int number;
-	//Traverse till last node
 	while (temp->link)
 	{
 	
